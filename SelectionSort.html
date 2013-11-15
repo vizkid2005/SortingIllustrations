@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Selection Sort : An Illustrated Example using HTML5 <canvas> Element</title>
+<style type="text/css" >
+			canvas {
+				border: dotted 1px black;
+				margin: 25px;
+			}
+			h1 {
+				font: Verdana, Geneva, sans-serif;
+				}
+			p{
+				font:Verdana;
+				font-size:20px;
+			}
+				
+			
+				
+</style>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-25351356-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script>
+
+/*************************************************************************************
+This Notice MUST remain INTACT if you wish to copy or use this script.
+
+Author : Huzefa Dargahwala
+
+Date : 28/6/2012
+
+Published on : www.unitedtraders.biz/vizkid2005/BubbleSort.html
+ **************************************************************************************/
+window.onload=init;
+
+var rectArray=[{x:20,y:256},
+				   	{x:138,y:256},
+					  {x:256,y:256},
+					  	{x:374,y:256},
+						  {x:492,y:256}];
+						  
+var centresArray=[{x:64,y:300},
+				   		{x:182,y:300},
+					  		{x:300,y:300},
+					  			{x:418,y:300},
+						 			 {x:536,y:300}];
+									 
+var elem=[54,31,92,6,14];
+
+var canvas;
+var ctx;
+var degrees=0;
+var animOver=true; var animPause = false;
+var cX,cY,r,x1,x2,y1,y2,rad,rad2,textObj,tWidth;
+var i=0;
+var j=0;
+
+
+function blank()
+{
+	
+	ctx.fillStyle="lightGray";
+	ctx.fillRect(0,0,600,600);
+	ctx.fillStyle="blue";
+	return;
+}
+
+function drawRect(elem1,elem2)
+{
+	var textObj;
+	var tWidth;
+	blank();
+	for(var i=0;i<rectArray.length;i++)
+	{
+		if(i!=elem1 && i!=elem2)
+		{
+			ctx.strokeRect(rectArray[i].x,rectArray[i].y,88,88);
+			textObj = ctx.measureText(elem[i]);
+			var tWidth = textObj.width;
+			ctx.fillText(elem[i],centresArray[i].x-(tWidth)/2,centresArray[i].y);
+			
+			
+		}
+	}
+}
+
+
+
+function animate(elem1,elem2)
+{
+	   	 cX = centresArray[elem1].x+(Math.abs(centresArray[elem1].x-centresArray[elem2].x))/2;
+		 cY = centresArray[elem1].y+(Math.abs(centresArray[elem1].y-centresArray[elem2].y))/2;
+		 r = (Math.abs(centresArray[elem1].x-centresArray[elem2].x))/2;
+		
+		 x1 = centresArray[elem1].x;   x2 = centresArray[elem2].x;
+		 y1 = centresArray[elem1].y;   y2 = centresArray[elem2].y;
+
+		 draw(elem1,elem2);
+}
+
+
+function draw(elem1,elem2)
+{				
+	animOver=false;	
+	
+	var time = setInterval(function(){
+		if(degrees<=180 && animPause==false)
+		{		
+				drawRect(elem1,elem2);
+				
+				rad2 = (degrees/180)*Math.PI
+				rad = (degrees/180)*Math.PI;
+				
+				textObj = ctx.measureText(elem[elem1]);
+				tWidth = textObj.width;
+				
+				x1=cX-r*Math.cos(rad);
+				y1=cY-r*Math.sin(rad);
+				ctx.strokeRect(x1-44,y1-44,88,88);
+				ctx.fillStyle="yellow";
+				ctx.font="20pt Verdana";
+				ctx.fillText("i = "+elem1,20,20);
+				ctx.fillRect(x1-44,y1-44,88,88);
+				ctx.fillStyle="blue";
+				ctx.font="15pt Verdana";
+				ctx.fillText(elem[elem1],x1-(tWidth)/2,y1);
+				
+				textObj = ctx.measureText(elem[elem2]);
+				tWidth = textObj.width;
+				
+				x2= cX+r*Math.cos(rad2);
+				y2 = cY+r*Math.sin(rad2);
+				ctx.strokeRect(x2-44,y2-44,88,88);
+				ctx.fillStyle="magenta";
+				ctx.font="20pt Verdana";
+				ctx.fillText("j = "+elem2,20,60);
+				ctx.fillRect(x2-44,y2-44,88,88);
+				ctx.fillStyle="blue";
+				ctx.font="15pt Verdana";
+				ctx.fillText(elem[elem2],x2-(tWidth)/2,y2);
+				
+				degrees++;
+		}
+		else if(animPause==false)
+		{
+		  degrees=0;
+		  clearInterval(time);
+		  swap(elem1,elem2);
+		  animOver=true;
+	    }
+		 
+	},20);
+}
+
+function init()
+{
+
+		canvas = document.getElementById('canvas');
+		ctx = canvas.getContext('2d');
+	
+		ctx.lineWidth=2;
+		ctx.strokeStyle="green";
+		ctx.font="15pt Verdana";
+		ctx.fillStyle="blue";
+		ctx.textBaseline="middle";
+		
+		drawRect(10,10);	
+		
+		document.getElementById("canvas").addEventListener("click", function(){
+	if(animPause == false)
+	{
+		animPause=true;
+	}
+	else
+	{
+		animPause=false;
+	}
+});
+		
+		var x;
+		var y;
+		
+		var interval = setInterval(function()
+		{
+			
+			if(animOver==true && animPause==false)
+			{	
+				x = elem[i];
+				y = elem[j];
+			
+					if(x>y)
+					{
+					
+						animate(i,j);
+						j++;
+					}
+					else
+					{	j++;
+					}
+				if(j > 4)
+				{
+					j = i+1;
+					i++;
+					if(i >= 4)
+						clearInterval(interval);
+				}
+			}
+        	
+		},1000);
+	
+}
+
+function swap(elem1,elem2)
+{
+	var temp = elem[elem1];
+	elem[elem1]=elem[elem2];
+	elem[elem2]=temp;
+		
+	
+}
+</script>
+
+</head>
+<body>
+
+<h1>Background</h1>
+
+<p>After searching pages after pages of Google Search Results,<br/>I couldn't find decent Illustrations of the algorithms we are taught in college.
+</p>
+<p>
+Then I decided to make my own, so that people who haven`t understood the algorithms could refer to these illustrations and UNDERSTAND the algorithm and do NOT MUG it up just for passing Exams.
+</p>
+<p>
+I was familiar with HTML5 and the very famous canvas element. I had seen many examples of all that you could do with it.<br/>
+So I decided to use HTML5 and canvas to put together this humble Illustration of the Bubble Sort Algorithm.
+</p>
+
+<h1>Selection Sort</h1>
+<h3>Also see <b>Bubble Sort</b> <a href="BubbleSort.html" alt="Bubble Sort Example ">Here</a></h3>
+<p>
+This example uses 5 elements in an array.<br/>
+Let the aray be A[ ] = { 54,31,92,6,14 }<br/>
+All Indices(ie : i ,j) begin from 0
+</p>
+
+
+
+<canvas width="600" height="600" id="canvas">
+Sorry You Do Not Have HTML5 Canvas Element supoort in your browser.
+Upgrade to Latest version of Firefox or Chrome</canvas>
+
+<p>Many more Illustrations coming up soon.<br/>
+Beautification of this page is underway.
+</p>
+
+<p>
+By Huzefa Dargahwala
+</p>
+
+</body>
+</html>
